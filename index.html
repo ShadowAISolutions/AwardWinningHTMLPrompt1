@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,24 +11,78 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=General+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
+  <!-- Prevent flash of wrong theme -->
+  <script>
+    (function() {
+      var saved = localStorage.getItem('pfc-theme');
+      if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+
   <style>
     /* ============================================
-       DESIGN TOKENS
+       DESIGN TOKENS — LIGHT (default)
+    ============================================ */
+    :root,
+    [data-theme="light"] {
+      --color-bg:          #f8f7f4;
+      --color-bg-raised:   #efeeeb;
+      --color-bg-card:     #ffffff;
+      --color-surface:     #e8e6e1;
+      --color-border:      rgba(0, 0, 0, 0.08);
+      --color-text:        #1a1a1a;
+      --color-text-dim:    rgba(26, 26, 26, 0.5);
+      --color-text-mid:    rgba(26, 26, 26, 0.7);
+      --color-accent:      #9a7b4f;
+      --color-accent-soft: rgba(154, 123, 79, 0.1);
+      --color-white:       #ffffff;
+
+      /* Canvas particles */
+      --particle-color: 120, 100, 60;
+      --particle-opacity: 0.12;
+      --particle-line-opacity: 0.06;
+
+      /* Nav scroll bg */
+      --nav-scroll-bg: rgba(248, 247, 244, 0.9);
+
+      /* Card shadow */
+      --card-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
+
+      /* Grid lines */
+      --grid-line-color: rgba(0, 0, 0, 0.03);
+    }
+
+    /* ============================================
+       DESIGN TOKENS — DARK
+    ============================================ */
+    [data-theme="dark"] {
+      --color-bg:          #0b0b0f;
+      --color-bg-raised:   #12121a;
+      --color-bg-card:     #16161f;
+      --color-surface:     #1c1c28;
+      --color-border:      rgba(255, 255, 255, 0.06);
+      --color-text:        #eae8e4;
+      --color-text-dim:    rgba(234, 232, 228, 0.55);
+      --color-text-mid:    rgba(234, 232, 228, 0.75);
+      --color-accent:      #c9a46c;
+      --color-accent-soft: rgba(201, 164, 108, 0.12);
+      --color-white:       #ffffff;
+
+      --particle-color: 201, 164, 108;
+      --particle-opacity: 0.2;
+      --particle-line-opacity: 0.08;
+
+      --nav-scroll-bg: rgba(11, 11, 15, 0.88);
+
+      --card-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+
+      --grid-line-color: rgba(255, 255, 255, 0.015);
+    }
+
+    /* ============================================
+       SHARED TOKENS (theme-independent)
     ============================================ */
     :root {
-      /* Colors — dark mode with warm accent */
-      --color-bg:        #0b0b0f;
-      --color-bg-raised: #12121a;
-      --color-bg-card:   #16161f;
-      --color-surface:   #1c1c28;
-      --color-border:    rgba(255, 255, 255, 0.06);
-      --color-text:      #eae8e4;
-      --color-text-dim:  rgba(234, 232, 228, 0.55);
-      --color-text-mid:  rgba(234, 232, 228, 0.75);
-      --color-accent:    #c9a46c;
-      --color-accent-soft: rgba(201, 164, 108, 0.12);
-      --color-white:     #ffffff;
-
       /* Typography */
       --font-display: 'Instrument Serif', Georgia, serif;
       --font-body:    'General Sans', -apple-system, sans-serif;
@@ -85,6 +139,7 @@
       color: var(--color-text);
       background-color: var(--color-bg);
       overflow-x: hidden;
+      transition: background-color 0.5s ease, color 0.5s ease;
     }
 
     img {
@@ -168,6 +223,23 @@
     }
 
     /* ============================================
+       FUTURISTIC BACKGROUND CANVAS
+    ============================================ */
+    #futuristic-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #futuristic-bg { display: none; }
+    }
+
+    /* ============================================
        NAVIGATION
     ============================================ */
     .nav {
@@ -181,7 +253,7 @@
     }
 
     .nav.is-scrolled {
-      background-color: rgba(11, 11, 15, 0.88);
+      background-color: var(--nav-scroll-bg);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       padding: var(--sp-2) 0;
@@ -218,6 +290,7 @@
       font-weight: 700;
       color: var(--color-bg);
       flex-shrink: 0;
+      transition: color 0.4s ease;
     }
 
     .nav__links {
@@ -226,9 +299,7 @@
     }
 
     @media (min-width: 768px) {
-      .nav__links {
-        display: flex;
-      }
+      .nav__links { display: flex; }
     }
 
     .nav__link {
@@ -261,6 +332,13 @@
       width: 100%;
     }
 
+    /* Nav right group */
+    .nav__right {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+    }
+
     .nav__cta {
       display: none;
       font-size: 14px;
@@ -269,7 +347,7 @@
       background: var(--color-accent);
       color: var(--color-bg);
       border-radius: var(--radius-sm);
-      transition: transform var(--duration-hover) ease, opacity var(--duration-hover) ease;
+      transition: transform var(--duration-hover) ease, opacity var(--duration-hover) ease, color 0.4s ease;
     }
 
     .nav__cta:hover { transform: scale(1.03); opacity: 0.9; }
@@ -277,6 +355,54 @@
     @media (min-width: 768px) {
       .nav__cta { display: inline-block; }
     }
+
+    /* Theme toggle */
+    .theme-toggle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg-card);
+      transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--color-accent);
+      transform: scale(1.08);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+
+    .theme-toggle__icon {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.4s var(--ease-smooth), opacity 0.3s ease;
+    }
+
+    /* Sun icon (shown in light mode) */
+    .theme-toggle__sun {
+      position: absolute;
+      color: var(--color-text);
+    }
+
+    /* Moon icon (shown in dark mode) */
+    .theme-toggle__moon {
+      position: absolute;
+      color: var(--color-text);
+    }
+
+    [data-theme="light"] .theme-toggle__sun  { opacity: 1; transform: rotate(0deg); }
+    [data-theme="light"] .theme-toggle__moon { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+    [data-theme="dark"]  .theme-toggle__sun  { opacity: 0; transform: rotate(90deg) scale(0.5); }
+    [data-theme="dark"]  .theme-toggle__moon { opacity: 1; transform: rotate(0deg); }
 
     /* Mobile menu toggle */
     .nav__toggle {
@@ -323,7 +449,7 @@
       gap: var(--sp-5);
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.4s ease;
+      transition: opacity 0.4s ease, background-color 0.5s ease;
     }
 
     .mobile-menu.is-open {
@@ -361,9 +487,14 @@
       content: '';
       position: absolute;
       inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(154, 123, 79, 0.05) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(154, 123, 79, 0.03) 0%, transparent 50%);
+      z-index: 1;
+    }
+
+    [data-theme="dark"] .hero__bg::before {
       background: radial-gradient(ellipse at 30% 50%, rgba(201, 164, 108, 0.06) 0%, transparent 60%),
                   radial-gradient(ellipse at 80% 20%, rgba(201, 164, 108, 0.03) 0%, transparent 50%);
-      z-index: 1;
     }
 
     /* Subtle grid texture */
@@ -372,8 +503,8 @@
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+        linear-gradient(var(--grid-line-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line-color) 1px, transparent 1px);
       background-size: 80px 80px;
       z-index: 2;
     }
@@ -443,7 +574,7 @@
       font-weight: 600;
       padding: 14px 32px;
       border-radius: var(--radius-sm);
-      transition: transform var(--duration-hover) ease, box-shadow var(--duration-hover) ease, background var(--duration-hover) ease;
+      transition: transform var(--duration-hover) ease, box-shadow var(--duration-hover) ease, background var(--duration-hover) ease, color 0.4s ease;
     }
 
     .btn:focus-visible {
@@ -458,7 +589,7 @@
 
     .btn--primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(201, 164, 108, 0.25);
+      box-shadow: 0 8px 32px rgba(154, 123, 79, 0.25);
     }
 
     .btn--outline {
@@ -504,6 +635,8 @@
        SECTION SHARED STYLES
     ============================================ */
     .section {
+      position: relative;
+      z-index: 1;
       padding: var(--sp-10) 0;
     }
 
@@ -561,6 +694,8 @@
       width: 100%;
       height: 1px;
       background: var(--color-border);
+      position: relative;
+      z-index: 1;
     }
 
     /* ============================================
@@ -586,6 +721,7 @@
       background: var(--color-bg-raised);
       border-radius: var(--radius-lg);
       overflow: hidden;
+      transition: background-color 0.5s ease;
     }
 
     .about__visual-inner {
@@ -610,6 +746,7 @@
       border: 1px solid var(--color-accent);
       border-radius: 50%;
       opacity: 0.3;
+      animation: emblemRotate 20s linear infinite;
     }
 
     .about__emblem::after {
@@ -619,6 +756,12 @@
       border: 1px solid var(--color-accent);
       border-radius: 50%;
       opacity: 0.6;
+      animation: emblemRotate 15s linear infinite reverse;
+    }
+
+    @keyframes emblemRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     .about__emblem-cross {
@@ -650,15 +793,11 @@
     }
 
     @media (min-width: 768px) {
-      .services__grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .services__grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (min-width: 1024px) {
-      .services__grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
+      .services__grid { grid-template-columns: repeat(3, 1fr); }
     }
 
     .service-card {
@@ -668,13 +807,18 @@
       border-radius: var(--radius-md);
       transition: transform var(--duration-hover) var(--ease-smooth),
                   border-color var(--duration-hover) ease,
-                  box-shadow var(--duration-hover) ease;
+                  box-shadow var(--duration-hover) ease,
+                  background-color 0.5s ease;
     }
 
     .service-card:hover {
       transform: translateY(-4px);
+      border-color: rgba(154, 123, 79, 0.2);
+      box-shadow: var(--card-shadow);
+    }
+
+    [data-theme="dark"] .service-card:hover {
       border-color: rgba(201, 164, 108, 0.2);
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
     }
 
     .service-card__icon {
@@ -709,9 +853,12 @@
        STATS BAR
     ============================================ */
     .stats {
+      position: relative;
+      z-index: 1;
       background: var(--color-bg-raised);
       border-top: 1px solid var(--color-border);
       border-bottom: 1px solid var(--color-border);
+      transition: background-color 0.5s ease;
     }
 
     .stats__grid {
@@ -768,12 +915,16 @@
       display: flex;
       align-items: center;
       gap: var(--sp-3);
-      transition: border-color var(--duration-hover) ease, transform var(--duration-hover) ease;
+      transition: border-color var(--duration-hover) ease, transform var(--duration-hover) ease, background-color 0.5s ease;
     }
 
     .team-card:hover {
-      border-color: rgba(201, 164, 108, 0.15);
+      border-color: rgba(154, 123, 79, 0.15);
       transform: translateY(-2px);
+    }
+
+    [data-theme="dark"] .team-card:hover {
+      border-color: rgba(201, 164, 108, 0.15);
     }
 
     .team-card__avatar {
@@ -906,6 +1057,7 @@
       background: var(--color-bg-card);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
+      transition: background-color 0.5s ease;
     }
 
     .contact-block__icon {
@@ -939,9 +1091,10 @@
        CTA BANNER
     ============================================ */
     .cta-banner {
+      position: relative;
+      z-index: 1;
       text-align: center;
       padding: var(--sp-12) var(--sp-3);
-      position: relative;
       overflow: hidden;
     }
 
@@ -977,6 +1130,8 @@
        FOOTER
     ============================================ */
     .footer {
+      position: relative;
+      z-index: 1;
       border-top: 1px solid var(--color-border);
       padding: var(--sp-8) 0 var(--sp-4);
     }
@@ -1048,6 +1203,9 @@
 </head>
 <body>
 
+  <!-- Futuristic particle network background -->
+  <canvas id="futuristic-bg" aria-hidden="true"></canvas>
+
   <!-- ========== NAVIGATION ========== -->
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="container nav__inner">
@@ -1064,13 +1222,30 @@
         <a href="#contact" class="nav__link" role="menuitem">Contact</a>
       </div>
 
-      <a href="tel:2028547400" class="nav__cta">Call (202) 854-7400</a>
+      <div class="nav__right">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <!-- Sun icon -->
+          <svg class="theme-toggle__icon theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <!-- Moon icon -->
+          <svg class="theme-toggle__icon theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
 
-      <button class="nav__toggle" aria-label="Open menu" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+        <a href="tel:2028547400" class="nav__cta">Call (202) 854-7400</a>
+
+        <button class="nav__toggle" aria-label="Open menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </div>
   </nav>
 
@@ -1457,20 +1632,175 @@
 
   <!-- ========== JAVASCRIPT ========== -->
   <script>
+    /* ---- Theme toggle ---- */
+    (function() {
+      var toggle = document.getElementById('theme-toggle');
+      var root = document.documentElement;
+
+      function setTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        localStorage.setItem('pfc-theme', theme);
+      }
+
+      toggle.addEventListener('click', function() {
+        var current = root.getAttribute('data-theme');
+        setTheme(current === 'dark' ? 'light' : 'dark');
+      });
+    })();
+
+    /* ---- Futuristic particle network background ---- */
+    (function() {
+      var canvas = document.getElementById('futuristic-bg');
+      if (!canvas) return;
+
+      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) return;
+
+      var ctx = canvas.getContext('2d');
+      var particles = [];
+      var PARTICLE_COUNT = 60;
+      var CONNECTION_DIST = 150;
+      var mouse = { x: -9999, y: -9999 };
+      var animId;
+      var w, h, dpr;
+
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = canvas.width = window.innerWidth * dpr;
+        h = canvas.height = window.innerHeight * dpr;
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+        ctx.scale(dpr, dpr);
+      }
+
+      function createParticles() {
+        particles = [];
+        var count = window.innerWidth < 768 ? 30 : PARTICLE_COUNT;
+        for (var i = 0; i < count; i++) {
+          particles.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            radius: Math.random() * 1.5 + 0.5
+          });
+        }
+      }
+
+      function getStyles() {
+        var cs = getComputedStyle(document.documentElement);
+        return {
+          particleColor: cs.getPropertyValue('--particle-color').trim(),
+          particleOpacity: parseFloat(cs.getPropertyValue('--particle-opacity').trim()) || 0.12,
+          lineOpacity: parseFloat(cs.getPropertyValue('--particle-line-opacity').trim()) || 0.06
+        };
+      }
+
+      function draw() {
+        var vw = window.innerWidth;
+        var vh = window.innerHeight;
+        ctx.clearRect(0, 0, vw, vh);
+
+        var styles = getStyles();
+        var pc = styles.particleColor || '120, 100, 60';
+        var po = styles.particleOpacity;
+        var lo = styles.lineOpacity;
+
+        // Update & draw particles
+        for (var i = 0; i < particles.length; i++) {
+          var p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+
+          // Wrap around edges
+          if (p.x < 0) p.x = vw;
+          if (p.x > vw) p.x = 0;
+          if (p.y < 0) p.y = vh;
+          if (p.y > vh) p.y = 0;
+
+          // Draw particle
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(' + pc + ',' + po + ')';
+          ctx.fill();
+
+          // Draw connections
+          for (var j = i + 1; j < particles.length; j++) {
+            var p2 = particles[j];
+            var dx = p.x - p2.x;
+            var dy = p.y - p2.y;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < CONNECTION_DIST) {
+              var alpha = (1 - dist / CONNECTION_DIST) * lo;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = 'rgba(' + pc + ',' + alpha + ')';
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+
+          // Mouse interaction — gentle repel
+          var mdx = p.x - mouse.x;
+          var mdy = p.y - mouse.y;
+          var mDist = Math.sqrt(mdx * mdx + mdy * mdy);
+          if (mDist < 120) {
+            var force = (120 - mDist) / 120 * 0.02;
+            p.vx += (mdx / mDist) * force;
+            p.vy += (mdy / mDist) * force;
+          }
+
+          // Speed damping
+          var speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+          if (speed > 0.5) {
+            p.vx *= 0.98;
+            p.vy *= 0.98;
+          }
+        }
+
+        // Horizontal scan line (very faint)
+        var scanY = (Date.now() * 0.02) % vh;
+        ctx.beginPath();
+        ctx.moveTo(0, scanY);
+        ctx.lineTo(vw, scanY);
+        ctx.strokeStyle = 'rgba(' + pc + ',0.03)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        animId = requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('mousemove', function(e) {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      }, { passive: true });
+
+      window.addEventListener('resize', function() {
+        resize();
+        createParticles();
+      });
+
+      resize();
+      createParticles();
+      draw();
+    })();
+
     /* ---- Scroll-triggered reveals ---- */
     (function() {
-      const reveals = document.querySelectorAll('.reveal');
+      var reveals = document.querySelectorAll('.reveal');
       if (!reveals.length) return;
 
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       if (prefersReducedMotion) {
-        reveals.forEach(el => el.classList.add('is-visible'));
+        reveals.forEach(function(el) { el.classList.add('is-visible'); });
         return;
       }
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-visible');
             observer.unobserve(entry.target);
@@ -1478,17 +1808,17 @@
         });
       }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
-      reveals.forEach(el => observer.observe(el));
+      reveals.forEach(function(el) { observer.observe(el); });
     })();
 
     /* ---- Navbar scroll state ---- */
     (function() {
-      const nav = document.querySelector('.nav');
-      let ticking = false;
+      var nav = document.querySelector('.nav');
+      var ticking = false;
 
       function onScroll() {
         if (!ticking) {
-          window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(function() {
             nav.classList.toggle('is-scrolled', window.scrollY > 60);
             ticking = false;
           });
@@ -1501,9 +1831,9 @@
 
     /* ---- Mobile menu toggle ---- */
     (function() {
-      const toggle = document.querySelector('.nav__toggle');
-      const menu = document.querySelector('.mobile-menu');
-      const links = menu.querySelectorAll('a');
+      var toggle = document.querySelector('.nav__toggle');
+      var menu = document.querySelector('.mobile-menu');
+      var links = menu.querySelectorAll('a');
 
       function closeMenu() {
         toggle.classList.remove('is-active');
@@ -1513,8 +1843,8 @@
         document.body.style.overflow = '';
       }
 
-      toggle.addEventListener('click', () => {
-        const isOpen = menu.classList.contains('is-open');
+      toggle.addEventListener('click', function() {
+        var isOpen = menu.classList.contains('is-open');
         if (isOpen) {
           closeMenu();
         } else {
@@ -1526,20 +1856,19 @@
         }
       });
 
-      links.forEach(link => link.addEventListener('click', closeMenu));
+      links.forEach(function(link) { link.addEventListener('click', closeMenu); });
     })();
 
     /* ---- FAQ accordion ---- */
     (function() {
-      const items = document.querySelectorAll('.faq-item');
+      var items = document.querySelectorAll('.faq-item');
 
-      items.forEach(item => {
-        const btn = item.querySelector('.faq-item__question');
-        btn.addEventListener('click', () => {
-          const isOpen = item.classList.contains('is-open');
+      items.forEach(function(item) {
+        var btn = item.querySelector('.faq-item__question');
+        btn.addEventListener('click', function() {
+          var isOpen = item.classList.contains('is-open');
 
-          // Close all others
-          items.forEach(i => {
+          items.forEach(function(i) {
             i.classList.remove('is-open');
             i.querySelector('.faq-item__question').setAttribute('aria-expanded', 'false');
           });
@@ -1554,14 +1883,14 @@
 
     /* ---- Smooth anchor scrolling (offset for fixed nav) ---- */
     (function() {
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
         anchor.addEventListener('click', function(e) {
-          const target = document.querySelector(this.getAttribute('href'));
+          var target = document.querySelector(this.getAttribute('href'));
           if (target) {
             e.preventDefault();
-            const offset = 80;
-            const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
-            window.scrollTo({ top, behavior: 'smooth' });
+            var offset = 80;
+            var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({ top: top, behavior: 'smooth' });
           }
         });
       });
