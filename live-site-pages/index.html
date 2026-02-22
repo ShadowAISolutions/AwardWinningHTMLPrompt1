@@ -1,24 +1,1901 @@
 <!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PFC Associates — Police &amp; Fire Clinic</title>
+  <meta name="description" content="PFC Associates provides comprehensive medical, behavioral health, and rehabilitation services for DC's police, fire, and public safety personnel.">
+
+  <!-- Preload critical fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=General+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+  <!-- Prevent flash of wrong theme -->
+  <script>
+    (function() {
+      var saved = localStorage.getItem('pfc-theme');
+      if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+
+  <style>
+    /* ============================================
+       DESIGN TOKENS — LIGHT (default)
+    ============================================ */
+    :root,
+    [data-theme="light"] {
+      --color-bg:          #f8f7f4;
+      --color-bg-raised:   #efeeeb;
+      --color-bg-card:     #ffffff;
+      --color-surface:     #e8e6e1;
+      --color-border:      rgba(0, 0, 0, 0.08);
+      --color-text:        #1a1a1a;
+      --color-text-dim:    rgba(26, 26, 26, 0.5);
+      --color-text-mid:    rgba(26, 26, 26, 0.7);
+      --color-accent:      #9a7b4f;
+      --color-accent-soft: rgba(154, 123, 79, 0.1);
+      --color-white:       #ffffff;
+
+      /* Canvas particles */
+      --particle-color: 120, 100, 60;
+      --particle-opacity: 0.12;
+      --particle-line-opacity: 0.06;
+
+      /* Nav scroll bg */
+      --nav-scroll-bg: rgba(248, 247, 244, 0.9);
+
+      /* Card shadow */
+      --card-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
+
+      /* Grid lines */
+      --grid-line-color: rgba(0, 0, 0, 0.03);
+    }
+
+    /* ============================================
+       DESIGN TOKENS — DARK
+    ============================================ */
+    [data-theme="dark"] {
+      --color-bg:          #0b0b0f;
+      --color-bg-raised:   #12121a;
+      --color-bg-card:     #16161f;
+      --color-surface:     #1c1c28;
+      --color-border:      rgba(255, 255, 255, 0.06);
+      --color-text:        #eae8e4;
+      --color-text-dim:    rgba(234, 232, 228, 0.55);
+      --color-text-mid:    rgba(234, 232, 228, 0.75);
+      --color-accent:      #c9a46c;
+      --color-accent-soft: rgba(201, 164, 108, 0.12);
+      --color-white:       #ffffff;
+
+      --particle-color: 201, 164, 108;
+      --particle-opacity: 0.2;
+      --particle-line-opacity: 0.08;
+
+      --nav-scroll-bg: rgba(11, 11, 15, 0.88);
+
+      --card-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+
+      --grid-line-color: rgba(255, 255, 255, 0.015);
+    }
+
+    /* ============================================
+       SHARED TOKENS (theme-independent)
+    ============================================ */
+    :root {
+      /* Typography */
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body:    'General Sans', -apple-system, sans-serif;
+
+      /* Spacing (8px grid) */
+      --sp-1:  8px;
+      --sp-2:  16px;
+      --sp-3:  24px;
+      --sp-4:  32px;
+      --sp-5:  40px;
+      --sp-6:  48px;
+      --sp-8:  64px;
+      --sp-10: 80px;
+      --sp-12: 96px;
+      --sp-15: 120px;
+      --sp-20: 160px;
+
+      /* Layout */
+      --max-width: 1320px;
+      --content-narrow: 720px;
+
+      /* Motion */
+      --ease-out:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+      --duration-reveal: 700ms;
+      --duration-hover:  350ms;
+
+      /* Misc */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+    }
+
+    /* ============================================
+       RESET & BASE
+    ============================================ */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--color-text);
+      background-color: var(--color-bg);
+      overflow-x: hidden;
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit;
+    }
+
+    ul, ol { list-style: none; }
+
+    ::selection {
+      background: var(--color-accent);
+      color: var(--color-bg);
+    }
+
+    /* ============================================
+       UTILITIES
+    ============================================ */
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--sp-3);
+    }
+
+    @media (min-width: 768px) {
+      .container { padding: 0 var(--sp-6); }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ============================================
+       REVEAL ANIMATIONS
+    ============================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity var(--duration-reveal) var(--ease-out),
+                  transform var(--duration-reveal) var(--ease-out);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 100ms; }
+    .reveal-delay-2 { transition-delay: 200ms; }
+    .reveal-delay-3 { transition-delay: 300ms; }
+    .reveal-delay-4 { transition-delay: 400ms; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+
+    /* ============================================
+       FUTURISTIC BACKGROUND CANVAS
+    ============================================ */
+    #futuristic-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #futuristic-bg { display: none; }
+    }
+
+    /* ============================================
+       NAVIGATION
+    ============================================ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: var(--sp-3) 0;
+      transition: background-color 0.4s ease, padding 0.4s ease, backdrop-filter 0.4s ease;
+    }
+
+    .nav.is-scrolled {
+      background-color: var(--nav-scroll-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      padding: var(--sp-2) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav__logo {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-1);
+    }
+
+    .nav__logo-mark {
+      width: 32px;
+      height: 32px;
+      background: var(--color-accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-bg);
+      flex-shrink: 0;
+      transition: color 0.4s ease;
+    }
+
+    .nav__links {
+      display: none;
+      gap: var(--sp-5);
+    }
+
+    @media (min-width: 768px) {
+      .nav__links { display: flex; }
+    }
+
+    .nav__link {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: var(--color-text-mid);
+      transition: color var(--duration-hover) ease;
+      position: relative;
+    }
+
+    .nav__link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--color-accent);
+      transition: width var(--duration-hover) var(--ease-smooth);
+    }
+
+    .nav__link:hover,
+    .nav__link:focus-visible {
+      color: var(--color-text);
+    }
+
+    .nav__link:hover::after,
+    .nav__link:focus-visible::after {
+      width: 100%;
+    }
+
+    /* Nav right group */
+    .nav__right {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+    }
+
+    .nav__cta {
+      display: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 24px;
+      background: var(--color-accent);
+      color: var(--color-bg);
+      border-radius: var(--radius-sm);
+      transition: transform var(--duration-hover) ease, opacity var(--duration-hover) ease, color 0.4s ease;
+    }
+
+    .nav__cta:hover { transform: scale(1.03); opacity: 0.9; }
+
+    @media (min-width: 768px) {
+      .nav__cta { display: inline-block; }
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg-card);
+      transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--color-accent);
+      transform: scale(1.08);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+
+    .theme-toggle__icon {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.4s var(--ease-smooth), opacity 0.3s ease;
+    }
+
+    /* Sun icon (shown in light mode) */
+    .theme-toggle__sun {
+      position: absolute;
+      color: var(--color-text);
+    }
+
+    /* Moon icon (shown in dark mode) */
+    .theme-toggle__moon {
+      position: absolute;
+      color: var(--color-text);
+    }
+
+    [data-theme="light"] .theme-toggle__sun  { opacity: 1; transform: rotate(0deg); }
+    [data-theme="light"] .theme-toggle__moon { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+    [data-theme="dark"]  .theme-toggle__sun  { opacity: 0; transform: rotate(90deg) scale(0.5); }
+    [data-theme="dark"]  .theme-toggle__moon { opacity: 1; transform: rotate(0deg); }
+
+    /* Mobile menu toggle */
+    .nav__toggle {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px;
+    }
+
+    @media (min-width: 768px) {
+      .nav__toggle { display: none; }
+    }
+
+    .nav__toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--color-text);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .nav__toggle.is-active span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .nav__toggle.is-active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav__toggle.is-active span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* Mobile overlay */
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: var(--color-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, background-color 0.5s ease;
+    }
+
+    .mobile-menu.is-open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .mobile-menu a {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--color-text);
+      transition: color 0.3s ease;
+    }
+
+    .mobile-menu a:hover { color: var(--color-accent); }
+
+    /* ============================================
+       HERO SECTION
+    ============================================ */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .hero__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero__bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(154, 123, 79, 0.05) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(154, 123, 79, 0.03) 0%, transparent 50%);
+      z-index: 1;
+    }
+
+    [data-theme="dark"] .hero__bg::before {
+      background: radial-gradient(ellipse at 30% 50%, rgba(201, 164, 108, 0.06) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(201, 164, 108, 0.03) 0%, transparent 50%);
+    }
+
+    /* Subtle grid texture */
+    .hero__bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--grid-line-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line-color) 1px, transparent 1px);
+      background-size: 80px 80px;
+      z-index: 2;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 3;
+      padding: var(--sp-15) 0 var(--sp-10);
+    }
+
+    .hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-1);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: var(--sp-4);
+    }
+
+    .hero__eyebrow::before {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: var(--color-accent);
+    }
+
+    .hero__title {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--color-text);
+      max-width: 900px;
+      margin-bottom: var(--sp-4);
+    }
+
+    .hero__title em {
+      font-style: italic;
+      color: var(--color-accent);
+    }
+
+    .hero__subtitle {
+      font-size: clamp(1rem, 1.5vw, 1.2rem);
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--color-text-mid);
+      max-width: 540px;
+      margin-bottom: var(--sp-6);
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-2);
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-1);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 32px;
+      border-radius: var(--radius-sm);
+      transition: transform var(--duration-hover) ease, box-shadow var(--duration-hover) ease, background var(--duration-hover) ease, color 0.4s ease;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 3px;
+    }
+
+    .btn--primary {
+      background: var(--color-accent);
+      color: var(--color-bg);
+    }
+
+    .btn--primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(154, 123, 79, 0.25);
+    }
+
+    .btn--outline {
+      background: transparent;
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+    }
+
+    .btn--outline:hover {
+      border-color: var(--color-text-mid);
+      transform: translateY(-2px);
+    }
+
+    .hero__scroll-hint {
+      position: absolute;
+      bottom: var(--sp-5);
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--sp-1);
+      color: var(--color-text-dim);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      z-index: 3;
+    }
+
+    .hero__scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--color-accent), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+
+    /* ============================================
+       SECTION SHARED STYLES
+    ============================================ */
+    .section {
+      position: relative;
+      z-index: 1;
+      padding: var(--sp-10) 0;
+    }
+
+    @media (min-width: 768px) {
+      .section { padding: var(--sp-15) 0; }
+    }
+
+    @media (min-width: 1024px) {
+      .section { padding: var(--sp-20) 0; }
+    }
+
+    .section__label {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-1);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: var(--sp-3);
+    }
+
+    .section__label::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--color-accent);
+    }
+
+    .section__heading {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      color: var(--color-text);
+      margin-bottom: var(--sp-3);
+    }
+
+    .section__heading em {
+      font-style: italic;
+      color: var(--color-accent);
+    }
+
+    .section__desc {
+      font-size: 17px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--color-text-mid);
+      max-width: var(--content-narrow);
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--color-border);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ============================================
+       ABOUT / MISSION SECTION
+    ============================================ */
+    .about__grid {
+      display: grid;
+      gap: var(--sp-8);
+      margin-top: var(--sp-8);
+    }
+
+    @media (min-width: 1024px) {
+      .about__grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--sp-12);
+        align-items: center;
+      }
+    }
+
+    .about__visual {
+      position: relative;
+      aspect-ratio: 4/3;
+      background: var(--color-bg-raised);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: background-color 0.5s ease;
+    }
+
+    .about__visual-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Abstract emblem */
+    .about__emblem {
+      width: 180px;
+      height: 180px;
+      position: relative;
+    }
+
+    .about__emblem::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--color-accent);
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: emblemRotate 20s linear infinite;
+    }
+
+    .about__emblem::after {
+      content: '';
+      position: absolute;
+      inset: 24px;
+      border: 1px solid var(--color-accent);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: emblemRotate 15s linear infinite reverse;
+    }
+
+    @keyframes emblemRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .about__emblem-cross {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 48px;
+      color: var(--color-accent);
+      font-weight: 300;
+    }
+
+    .about__text p {
+      color: var(--color-text-mid);
+      margin-bottom: var(--sp-3);
+      font-weight: 300;
+      line-height: 1.75;
+    }
+
+    .about__text p:last-child { margin-bottom: 0; }
+
+    /* ============================================
+       SERVICES SECTION
+    ============================================ */
+    .services__grid {
+      display: grid;
+      gap: var(--sp-3);
+      margin-top: var(--sp-8);
+    }
+
+    @media (min-width: 768px) {
+      .services__grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (min-width: 1024px) {
+      .services__grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .service-card {
+      padding: var(--sp-5);
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      transition: transform var(--duration-hover) var(--ease-smooth),
+                  border-color var(--duration-hover) ease,
+                  box-shadow var(--duration-hover) ease,
+                  background-color 0.5s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(154, 123, 79, 0.2);
+      box-shadow: var(--card-shadow);
+    }
+
+    [data-theme="dark"] .service-card:hover {
+      border-color: rgba(201, 164, 108, 0.2);
+    }
+
+    .service-card__icon {
+      width: 48px;
+      height: 48px;
+      background: var(--color-accent-soft);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: var(--sp-3);
+      color: var(--color-accent);
+    }
+
+    .service-card__title {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 18px;
+      margin-bottom: var(--sp-1);
+      color: var(--color-text);
+    }
+
+    .service-card__desc {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--color-text-dim);
+    }
+
+    /* ============================================
+       STATS BAR
+    ============================================ */
+    .stats {
+      position: relative;
+      z-index: 1;
+      background: var(--color-bg-raised);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      transition: background-color 0.5s ease;
+    }
+
+    .stats__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--sp-4);
+      text-align: center;
+      padding: var(--sp-8) 0;
+    }
+
+    @media (min-width: 768px) {
+      .stats__grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    .stat__number {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      line-height: 1;
+      color: var(--color-accent);
+      letter-spacing: -0.02em;
+      margin-bottom: var(--sp-1);
+    }
+
+    .stat__label {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--color-text-dim);
+    }
+
+    /* ============================================
+       LEADERSHIP SECTION
+    ============================================ */
+    .team__grid {
+      display: grid;
+      gap: var(--sp-3);
+      margin-top: var(--sp-8);
+    }
+
+    @media (min-width: 768px) {
+      .team__grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (min-width: 1024px) {
+      .team__grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .team-card {
+      padding: var(--sp-4);
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      transition: border-color var(--duration-hover) ease, transform var(--duration-hover) ease, background-color 0.5s ease;
+    }
+
+    .team-card:hover {
+      border-color: rgba(154, 123, 79, 0.15);
+      transform: translateY(-2px);
+    }
+
+    [data-theme="dark"] .team-card:hover {
+      border-color: rgba(201, 164, 108, 0.15);
+    }
+
+    .team-card__avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--color-accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--color-accent);
+      flex-shrink: 0;
+    }
+
+    .team-card__name {
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--color-text);
+      margin-bottom: 2px;
+    }
+
+    .team-card__role {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-text-dim);
+    }
+
+    .team-card__creds {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-accent);
+      margin-top: 2px;
+    }
+
+    /* ============================================
+       FAQ SECTION
+    ============================================ */
+    .faq__list {
+      margin-top: var(--sp-8);
+      max-width: 860px;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .faq-item__question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--sp-3) 0;
+      font-family: var(--font-body);
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--color-text);
+      text-align: left;
+      transition: color var(--duration-hover) ease;
+      gap: var(--sp-2);
+    }
+
+    .faq-item__question:hover { color: var(--color-accent); }
+
+    .faq-item__question:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+
+    .faq-item__icon {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--color-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--color-text-dim);
+      flex-shrink: 0;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .faq-item.is-open .faq-item__icon {
+      transform: rotate(45deg);
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    .faq-item__answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s var(--ease-smooth), padding 0.4s var(--ease-smooth);
+    }
+
+    .faq-item.is-open .faq-item__answer {
+      max-height: 300px;
+      padding-bottom: var(--sp-3);
+    }
+
+    .faq-item__answer p {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--color-text-mid);
+      padding-right: var(--sp-6);
+    }
+
+    /* ============================================
+       HOURS / CONTACT SECTION
+    ============================================ */
+    .contact__grid {
+      display: grid;
+      gap: var(--sp-4);
+      margin-top: var(--sp-8);
+    }
+
+    @media (min-width: 768px) {
+      .contact__grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (min-width: 1024px) {
+      .contact__grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .contact-block {
+      padding: var(--sp-5);
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      transition: background-color 0.5s ease;
+    }
+
+    .contact-block__icon {
+      font-size: 24px;
+      margin-bottom: var(--sp-2);
+      color: var(--color-accent);
+    }
+
+    .contact-block__title {
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: var(--sp-1);
+      color: var(--color-text);
+    }
+
+    .contact-block__text {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--color-text-mid);
+      line-height: 1.7;
+    }
+
+    .contact-block__text a {
+      color: var(--color-accent);
+      transition: opacity 0.3s ease;
+    }
+
+    .contact-block__text a:hover { opacity: 0.8; }
+
+    /* ============================================
+       CTA BANNER
+    ============================================ */
+    .cta-banner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: var(--sp-12) var(--sp-3);
+      overflow: hidden;
+    }
+
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, var(--color-accent-soft) 0%, transparent 70%);
+    }
+
+    .cta-banner > * { position: relative; z-index: 1; }
+
+    .cta-banner__heading {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--color-text);
+      margin-bottom: var(--sp-3);
+    }
+
+    .cta-banner__desc {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--color-text-mid);
+      margin-bottom: var(--sp-5);
+      max-width: 500px;
+      margin-inline: auto;
+    }
+
+    /* ============================================
+       FOOTER
+    ============================================ */
+    .footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--color-border);
+      padding: var(--sp-8) 0 var(--sp-4);
+    }
+
+    .footer__grid {
+      display: grid;
+      gap: var(--sp-6);
+      margin-bottom: var(--sp-8);
+    }
+
+    @media (min-width: 768px) {
+      .footer__grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+    }
+
+    .footer__brand-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--color-text-dim);
+      line-height: 1.7;
+      margin-top: var(--sp-2);
+      max-width: 300px;
+    }
+
+    .footer__heading {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text);
+      margin-bottom: var(--sp-2);
+    }
+
+    .footer__list li { margin-bottom: var(--sp-1); }
+
+    .footer__list a {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--color-text-dim);
+      transition: color 0.3s ease;
+    }
+
+    .footer__list a:hover { color: var(--color-accent); }
+
+    .footer__bottom {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--sp-2);
+      padding-top: var(--sp-4);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .footer__copy {
+      font-size: 14px;
+      color: var(--color-text-dim);
+      font-weight: 300;
+    }
+
+    .footer__back-top {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-mid);
+      transition: color 0.3s ease;
+    }
+
+    .footer__back-top:hover { color: var(--color-accent); }
+  </style>
+</head>
+<body>
+
+  <!-- Futuristic particle network background -->
+  <canvas id="futuristic-bg" aria-hidden="true"></canvas>
+
+  <!-- ========== NAVIGATION ========== -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container nav__inner">
+      <a href="#" class="nav__logo" aria-label="PFC Associates Home">
+        <span class="nav__logo-mark">+</span>
+        PFC Associates
+      </a>
+
+      <div class="nav__links" role="menubar">
+        <a href="#about" class="nav__link" role="menuitem">About</a>
+        <a href="#services" class="nav__link" role="menuitem">Services</a>
+        <a href="#leadership" class="nav__link" role="menuitem">Leadership</a>
+        <a href="#faq" class="nav__link" role="menuitem">FAQ</a>
+        <a href="#contact" class="nav__link" role="menuitem">Contact</a>
+      </div>
+
+      <div class="nav__right">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <!-- Sun icon -->
+          <svg class="theme-toggle__icon theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <!-- Moon icon -->
+          <svg class="theme-toggle__icon theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+
+        <a href="tel:2028547400" class="nav__cta">Call (202) 854-7400</a>
+
+        <button class="nav__toggle" aria-label="Open menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile menu overlay -->
+  <div class="mobile-menu" aria-hidden="true">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#leadership">Leadership</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <!-- ========== HERO ========== -->
+  <header class="hero" id="hero">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="container hero__content">
+      <p class="hero__eyebrow reveal">Police &amp; Fire Clinic</p>
+      <h1 class="hero__title reveal reveal-delay-1">
+        Healthcare for those who <em>protect &amp; serve</em>
+      </h1>
+      <p class="hero__subtitle reveal reveal-delay-2">
+        Comprehensive medical, behavioral health, and rehabilitation services dedicated to DC's police, fire, and public safety personnel.
+      </p>
+      <div class="hero__actions reveal reveal-delay-3">
+        <a href="tel:2028547400" class="btn btn--primary">Schedule a Visit</a>
+        <a href="#services" class="btn btn--outline">Our Services</a>
+      </div>
+    </div>
+    <div class="hero__scroll-hint" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ========== ABOUT ========== -->
+    <section class="section" id="about">
+      <div class="container">
+        <div class="about__grid">
+          <div class="about__visual reveal">
+            <div class="about__visual-inner">
+              <div class="about__emblem">
+                <span class="about__emblem-cross">+</span>
+              </div>
+            </div>
+          </div>
+          <div class="about__text">
+            <span class="section__label reveal">Our Mission</span>
+            <h2 class="section__heading reveal reveal-delay-1">
+              Dedicated care for <em>first responders</em>
+            </h2>
+            <p class="reveal reveal-delay-2">
+              PFC Associates operates the Police and Fire Clinic (PFC) in Washington, DC &mdash; a specialized occupational health facility providing comprehensive medical services to Metropolitan Police, Fire and EMS, US Secret Service, and US Park Police personnel.
+            </p>
+            <p class="reveal reveal-delay-3">
+              Our integrated approach combines primary care, behavioral health, physical rehabilitation, and diagnostic services under one roof, ensuring first responders receive the focused, timely care they deserve.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider container"></div>
+
+    <!-- ========== SERVICES ========== -->
+    <section class="section" id="services">
+      <div class="container">
+        <span class="section__label reveal">What We Offer</span>
+        <h2 class="section__heading reveal reveal-delay-1">
+          Integrated health <em>services</em>
+        </h2>
+        <p class="section__desc reveal reveal-delay-2">
+          From routine care to specialized treatment, every service is designed around the unique demands of public safety work.
+        </p>
+
+        <div class="services__grid">
+          <div class="service-card reveal">
+            <div class="service-card__icon" aria-hidden="true">&#9764;</div>
+            <h3 class="service-card__title">Primary Care</h3>
+            <p class="service-card__desc">Routine examinations, acute illness management, and ongoing health maintenance for active personnel.</p>
+          </div>
+          <div class="service-card reveal reveal-delay-1">
+            <div class="service-card__icon" aria-hidden="true">&#9881;</div>
+            <h3 class="service-card__title">Occupational Health</h3>
+            <p class="service-card__desc">Pre-employment physicals, fitness-for-duty evaluations, and workers' compensation case management.</p>
+          </div>
+          <div class="service-card reveal reveal-delay-2">
+            <div class="service-card__icon" aria-hidden="true">&#10023;</div>
+            <h3 class="service-card__title">Behavioral Health</h3>
+            <p class="service-card__desc">Confidential counseling, trauma support, psychological evaluations, and crisis intervention services.</p>
+          </div>
+          <div class="service-card reveal reveal-delay-3">
+            <div class="service-card__icon" aria-hidden="true">&#8982;</div>
+            <h3 class="service-card__title">Physical Therapy</h3>
+            <p class="service-card__desc">Injury rehabilitation, strength conditioning, and return-to-duty programs tailored to job demands.</p>
+          </div>
+          <div class="service-card reveal reveal-delay-4">
+            <div class="service-card__icon" aria-hidden="true">&#9096;</div>
+            <h3 class="service-card__title">Radiology &amp; Imaging</h3>
+            <p class="service-card__desc">On-site X-ray, MRI access, and diagnostic imaging for rapid evaluation and treatment planning.</p>
+          </div>
+          <div class="service-card reveal">
+            <div class="service-card__icon" aria-hidden="true">&#9878;</div>
+            <h3 class="service-card__title">Specialist Referrals</h3>
+            <p class="service-card__desc">Coordinated referrals to orthopedics, neurology, cardiology, and other specialists as needed.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== STATS ========== -->
+    <section class="stats" aria-label="Key statistics">
+      <div class="container">
+        <div class="stats__grid">
+          <div class="reveal">
+            <div class="stat__number">4</div>
+            <div class="stat__label">Agencies Served</div>
+          </div>
+          <div class="reveal reveal-delay-1">
+            <div class="stat__number">24/7</div>
+            <div class="stat__label">Crisis Support</div>
+          </div>
+          <div class="reveal reveal-delay-2">
+            <div class="stat__number">16 hr</div>
+            <div class="stat__label">Daily Clinic Hours</div>
+          </div>
+          <div class="reveal reveal-delay-3">
+            <div class="stat__number">6+</div>
+            <div class="stat__label">Specialties On-Site</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== LEADERSHIP ========== -->
+    <section class="section" id="leadership">
+      <div class="container">
+        <span class="section__label reveal">Our Team</span>
+        <h2 class="section__heading reveal reveal-delay-1">
+          Experienced <em>leadership</em>
+        </h2>
+        <p class="section__desc reveal reveal-delay-2">
+          A multidisciplinary team of physicians, nurses, psychologists, and administrators committed to first-responder wellbeing.
+        </p>
+
+        <div class="team__grid">
+          <div class="team-card reveal">
+            <div class="team-card__avatar">MS</div>
+            <div>
+              <div class="team-card__name">Marian Stamps</div>
+              <div class="team-card__role">Chief Operating Officer</div>
+              <div class="team-card__creds">MHSA, BSN, RN</div>
+            </div>
+          </div>
+          <div class="team-card reveal reveal-delay-1">
+            <div class="team-card__avatar">OM</div>
+            <div>
+              <div class="team-card__name">Dr. Olusola Malomo</div>
+              <div class="team-card__role">Medical Director</div>
+              <div class="team-card__creds">M.D.</div>
+            </div>
+          </div>
+          <div class="team-card reveal reveal-delay-2">
+            <div class="team-card__avatar">JS</div>
+            <div>
+              <div class="team-card__name">Dr. Jeremiah Stubbs</div>
+              <div class="team-card__role">Associate Medical Director</div>
+              <div class="team-card__creds">M.D.</div>
+            </div>
+          </div>
+          <div class="team-card reveal reveal-delay-3">
+            <div class="team-card__avatar">BM</div>
+            <div>
+              <div class="team-card__name">Breanna Markenson-Bussel</div>
+              <div class="team-card__role">BHS Director</div>
+              <div class="team-card__creds">Psy.D</div>
+            </div>
+          </div>
+          <div class="team-card reveal">
+            <div class="team-card__avatar">CJ</div>
+            <div>
+              <div class="team-card__name">Courtney Jones</div>
+              <div class="team-card__role">Manager, Clinical &amp; IT</div>
+              <div class="team-card__creds">MHIA, BSN, RN</div>
+            </div>
+          </div>
+          <div class="team-card reveal reveal-delay-1">
+            <div class="team-card__avatar">RP</div>
+            <div>
+              <div class="team-card__name">Richard Pointer</div>
+              <div class="team-card__role">Manager, Financial Services</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider container"></div>
+
+    <!-- ========== FAQ ========== -->
+    <section class="section" id="faq">
+      <div class="container">
+        <span class="section__label reveal">Common Questions</span>
+        <h2 class="section__heading reveal reveal-delay-1">
+          Frequently <em>asked</em>
+        </h2>
+
+        <div class="faq__list">
+          <div class="faq-item reveal">
+            <button class="faq-item__question" aria-expanded="false">
+              <span>What are PFC's hours of operation?</span>
+              <span class="faq-item__icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-item__answer" role="region">
+              <p>The Police and Fire Clinic is open 0700&ndash;2300 hours (7 AM &ndash; 11 PM), Monday through Friday. The clinic is closed during major holidays.</p>
+            </div>
+          </div>
+
+          <div class="faq-item reveal reveal-delay-1">
+            <button class="faq-item__question" aria-expanded="false">
+              <span>Where should I go if I'm sick or injured after hours?</span>
+              <span class="faq-item__icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-item__answer" role="region">
+              <p>After hours, members can visit MedStar Washington Hospital Center, MedStar Georgetown University Hospital Center Emergency Rooms, MedStar Prompt Care (Adams Morgan or Capitol Hill), or Providence Urgent Care Center depending on severity.</p>
+            </div>
+          </div>
+
+          <div class="faq-item reveal reveal-delay-2">
+            <button class="faq-item__question" aria-expanded="false">
+              <span>Can I use my own doctor instead of PFC?</span>
+              <span class="faq-item__icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-item__answer" role="region">
+              <p>PFC does not cover outside specialists unless referred by the clinic. Your private insurance may deny reimbursement since treatment involves workers' compensation.</p>
+            </div>
+          </div>
+
+          <div class="faq-item reveal reveal-delay-3">
+            <button class="faq-item__question" aria-expanded="false">
+              <span>What should I wear to physical therapy?</span>
+              <span class="faq-item__icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-item__answer" role="region">
+              <p>Wear loose-fitting clothing that allows access to the injured area &mdash; sweats or shorts for lower body injuries, sleeveless shirts for shoulder issues. Bring supportive shoes; no flip-flops.</p>
+            </div>
+          </div>
+
+          <div class="faq-item reveal">
+            <button class="faq-item__question" aria-expanded="false">
+              <span>How do I prepare for an MRI?</span>
+              <span class="faq-item__icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-item__answer" role="region">
+              <p>An MRI uses a powerful magnet &mdash; wear regular clothing without jewelry or hairpins. Officers must secure weapons beforehand. Patients requiring sedation will need to arrange transportation.</p>
+            </div>
+          </div>
+
+          <div class="faq-item reveal reveal-delay-1">
+            <button class="faq-item__question" aria-expanded="false">
+              <span>How do I request medical records?</span>
+              <span class="faq-item__icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-item__answer" role="region">
+              <p>Complete a medical records release form with pertinent details and submit via mail, fax, or in-person. Allow 3&ndash;5 business days for reproduction.</p>
+            </div>
+          </div>
+
+          <div class="faq-item reveal reveal-delay-2">
+            <button class="faq-item__question" aria-expanded="false">
+              <span>How do I reschedule an appointment?</span>
+              <span class="faq-item__icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-item__answer" role="region">
+              <p>Contact your liaison or provider at PFC directly. Be sure to bring your picture ID, medical records, and relevant imaging related to your injury when you visit.</p>
+            </div>
+          </div>
+
+          <div class="faq-item reveal reveal-delay-3">
+            <button class="faq-item__question" aria-expanded="false">
+              <span>What mental health crisis resources are available?</span>
+              <span class="faq-item__icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-item__answer" role="region">
+              <p>For immediate support, contact the 988 Suicide &amp; Crisis Lifeline (call or text 988), available 24/7. You can also reach out to PFC's Behavioral Health team for guidance during clinic hours.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CONTACT ========== -->
+    <section class="section" id="contact">
+      <div class="container">
+        <span class="section__label reveal">Get In Touch</span>
+        <h2 class="section__heading reveal reveal-delay-1">
+          Contact &amp; <em>location</em>
+        </h2>
+
+        <div class="contact__grid">
+          <div class="contact-block reveal">
+            <div class="contact-block__icon" aria-hidden="true">&#9742;</div>
+            <h3 class="contact-block__title">Main Line</h3>
+            <p class="contact-block__text">
+              <a href="tel:2028547400">(202) 854-7400</a><br>
+              Mon&ndash;Fri, 7 AM &ndash; 11 PM
+            </p>
+          </div>
+          <div class="contact-block reveal reveal-delay-1">
+            <div class="contact-block__icon" aria-hidden="true">&#9993;</div>
+            <h3 class="contact-block__title">Behavioral Health</h3>
+            <p class="contact-block__text">
+              <a href="tel:2028547434">(202) 854-7434</a><br>
+              Confidential support line
+            </p>
+          </div>
+          <div class="contact-block reveal reveal-delay-2">
+            <div class="contact-block__icon" aria-hidden="true">&#9873;</div>
+            <h3 class="contact-block__title">Location</h3>
+            <p class="contact-block__text">
+              Police &amp; Fire Clinic<br>
+              Washington, DC
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CTA BANNER ========== -->
+    <section class="cta-banner" aria-label="Call to action">
+      <h2 class="cta-banner__heading reveal">Ready to schedule <em>your visit</em>?</h2>
+      <p class="cta-banner__desc reveal reveal-delay-1">Our team is here to support you. Call us or stop by during clinic hours.</p>
+      <a href="tel:2028547400" class="btn btn--primary reveal reveal-delay-2">Call (202) 854-7400</a>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <a href="#" class="nav__logo" aria-label="PFC Associates Home">
+            <span class="nav__logo-mark">+</span>
+            PFC Associates
+          </a>
+          <p class="footer__brand-desc">Comprehensive occupational health services for Washington DC's police, fire, and public safety personnel.</p>
+        </div>
+        <div>
+          <h4 class="footer__heading">Quick Links</h4>
+          <ul class="footer__list">
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#leadership">Leadership</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__heading">Services</h4>
+          <ul class="footer__list">
+            <li><a href="#services">Primary Care</a></li>
+            <li><a href="#services">Behavioral Health</a></li>
+            <li><a href="#services">Physical Therapy</a></li>
+            <li><a href="#services">Radiology</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__heading">Contact</h4>
+          <ul class="footer__list">
+            <li><a href="tel:2028547400">(202) 854-7400</a></li>
+            <li><a href="tel:2028547434">(202) 854-7434</a></li>
+            <li><a href="#contact">Directions</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span class="footer__copy">&copy; 2026 PFC Associates. All rights reserved.</span>
+        <a href="#hero" class="footer__back-top" aria-label="Back to top">&uarr; Back to top</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== JAVASCRIPT ========== -->
+  <script>
+    /* ---- Theme toggle ---- */
+    (function() {
+      var toggle = document.getElementById('theme-toggle');
+      var root = document.documentElement;
+
+      function setTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        localStorage.setItem('pfc-theme', theme);
+      }
+
+      toggle.addEventListener('click', function() {
+        var current = root.getAttribute('data-theme');
+        setTheme(current === 'dark' ? 'light' : 'dark');
+      });
+    })();
+
+    /* ---- Futuristic particle network background ---- */
+    (function() {
+      var canvas = document.getElementById('futuristic-bg');
+      if (!canvas) return;
+
+      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) return;
+
+      var ctx = canvas.getContext('2d');
+      var particles = [];
+      var PARTICLE_COUNT = 60;
+      var CONNECTION_DIST = 150;
+      var mouse = { x: -9999, y: -9999 };
+      var animId;
+      var w, h, dpr;
+
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = canvas.width = window.innerWidth * dpr;
+        h = canvas.height = window.innerHeight * dpr;
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+        ctx.scale(dpr, dpr);
+      }
+
+      function createParticles() {
+        particles = [];
+        var count = window.innerWidth < 768 ? 30 : PARTICLE_COUNT;
+        for (var i = 0; i < count; i++) {
+          particles.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            radius: Math.random() * 1.5 + 0.5
+          });
+        }
+      }
+
+      function getStyles() {
+        var cs = getComputedStyle(document.documentElement);
+        return {
+          particleColor: cs.getPropertyValue('--particle-color').trim(),
+          particleOpacity: parseFloat(cs.getPropertyValue('--particle-opacity').trim()) || 0.12,
+          lineOpacity: parseFloat(cs.getPropertyValue('--particle-line-opacity').trim()) || 0.06
+        };
+      }
+
+      function draw() {
+        var vw = window.innerWidth;
+        var vh = window.innerHeight;
+        ctx.clearRect(0, 0, vw, vh);
+
+        var styles = getStyles();
+        var pc = styles.particleColor || '120, 100, 60';
+        var po = styles.particleOpacity;
+        var lo = styles.lineOpacity;
+
+        // Update & draw particles
+        for (var i = 0; i < particles.length; i++) {
+          var p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+
+          // Wrap around edges
+          if (p.x < 0) p.x = vw;
+          if (p.x > vw) p.x = 0;
+          if (p.y < 0) p.y = vh;
+          if (p.y > vh) p.y = 0;
+
+          // Draw particle
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(' + pc + ',' + po + ')';
+          ctx.fill();
+
+          // Draw connections
+          for (var j = i + 1; j < particles.length; j++) {
+            var p2 = particles[j];
+            var dx = p.x - p2.x;
+            var dy = p.y - p2.y;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < CONNECTION_DIST) {
+              var alpha = (1 - dist / CONNECTION_DIST) * lo;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = 'rgba(' + pc + ',' + alpha + ')';
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+
+          // Mouse interaction — gentle repel
+          var mdx = p.x - mouse.x;
+          var mdy = p.y - mouse.y;
+          var mDist = Math.sqrt(mdx * mdx + mdy * mdy);
+          if (mDist < 120) {
+            var force = (120 - mDist) / 120 * 0.02;
+            p.vx += (mdx / mDist) * force;
+            p.vy += (mdy / mDist) * force;
+          }
+
+          // Speed damping
+          var speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+          if (speed > 0.5) {
+            p.vx *= 0.98;
+            p.vy *= 0.98;
+          }
+        }
+
+        // Horizontal scan line (very faint)
+        var scanY = (Date.now() * 0.02) % vh;
+        ctx.beginPath();
+        ctx.moveTo(0, scanY);
+        ctx.lineTo(vw, scanY);
+        ctx.strokeStyle = 'rgba(' + pc + ',0.03)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        animId = requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('mousemove', function(e) {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      }, { passive: true });
+
+      window.addEventListener('resize', function() {
+        resize();
+        createParticles();
+      });
+
+      resize();
+      createParticles();
+      draw();
+    })();
+
+    /* ---- Scroll-triggered reveals ---- */
+    (function() {
+      var reveals = document.querySelectorAll('.reveal');
+      if (!reveals.length) return;
+
+      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReducedMotion) {
+        reveals.forEach(function(el) { el.classList.add('is-visible'); });
+        return;
+      }
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+      reveals.forEach(function(el) { observer.observe(el); });
+    })();
+
+    /* ---- Navbar scroll state ---- */
+    (function() {
+      var nav = document.querySelector('.nav');
+      var ticking = false;
+
+      function onScroll() {
+        if (!ticking) {
+          window.requestAnimationFrame(function() {
+            nav.classList.toggle('is-scrolled', window.scrollY > 60);
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+
+    /* ---- Mobile menu toggle ---- */
+    (function() {
+      var toggle = document.querySelector('.nav__toggle');
+      var menu = document.querySelector('.mobile-menu');
+      var links = menu.querySelectorAll('a');
+
+      function closeMenu() {
+        toggle.classList.remove('is-active');
+        toggle.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('is-open');
+        menu.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      toggle.addEventListener('click', function() {
+        var isOpen = menu.classList.contains('is-open');
+        if (isOpen) {
+          closeMenu();
+        } else {
+          toggle.classList.add('is-active');
+          toggle.setAttribute('aria-expanded', 'true');
+          menu.classList.add('is-open');
+          menu.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+        }
+      });
+
+      links.forEach(function(link) { link.addEventListener('click', closeMenu); });
+    })();
+
+    /* ---- FAQ accordion ---- */
+    (function() {
+      var items = document.querySelectorAll('.faq-item');
+
+      items.forEach(function(item) {
+        var btn = item.querySelector('.faq-item__question');
+        btn.addEventListener('click', function() {
+          var isOpen = item.classList.contains('is-open');
+
+          items.forEach(function(i) {
+            i.classList.remove('is-open');
+            i.querySelector('.faq-item__question').setAttribute('aria-expanded', 'false');
+          });
+
+          if (!isOpen) {
+            item.classList.add('is-open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+    })();
+
+    /* ---- Smooth anchor scrolling (offset for fixed nav) ---- */
+    (function() {
+      document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+          var target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            e.preventDefault();
+            var offset = 80;
+            var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
 </html>
-<!-- Developed by: ShadowAISolutions -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
